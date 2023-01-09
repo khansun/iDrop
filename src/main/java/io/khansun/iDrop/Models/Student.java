@@ -61,7 +61,7 @@ public class Student implements Serializable {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
-
+    public Student(){}
     public Student(Long id, String name, String department, String roomNumber, int phoneNumber, String photoURL) {
         this.id = id;
         this.name = name;

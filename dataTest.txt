@@ -1,0 +1,7 @@
+{
+    "name": "Mahamudur Rahaman Khan",
+    "department": "CSE",
+    "roomNumber": "405",
+    "phoneNumber": "01784190980",
+    "photoURL": "photos/01784190980"
+}

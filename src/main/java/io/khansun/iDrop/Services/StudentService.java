@@ -5,9 +5,9 @@ import io.khansun.iDrop.Models.Student;
 import io.khansun.iDrop.Repos.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 public class StudentService {
@@ -18,7 +18,8 @@ public class StudentService {
     }
 
     public Student addStudent(Student student){
-        student.setId(Long.valueOf(UUID.randomUUID().toString()));
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        student.setId(timestamp.getTime());
         return studentRepo.save(student);
     }
 
@@ -27,7 +28,7 @@ public class StudentService {
     }
 
     public Student findStudentById(Long id){
-        return studentRepo.findStudentBtId(id).orElseThrow(() -> new userNotFoundException("This ID does not exit for any user"));
+        return studentRepo.findStudentById(id).orElseThrow(() -> new userNotFoundException("This ID does not exit for any user"));
     }
 
     public Student updateStudent(Student student){
