@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "name": "Mahamudur Rahaman Khan",
+        "department": "CSE",
+        "roomNumber": "405",
+        "phoneNumber": 1784190980,
+        "photoURL": "photos/01784190980"
+    },
+    {
+        "id": 2,
+        "name": "Sajid Shahriar Joarder",
+        "department": "CSE",
+        "roomNumber": "UB 119",
+        "phoneNumber": 1784190991,
+        "photoURL": "photos/01784190991"
+    },
+    {
+        "id": 3,
+        "name": "Md. Rafid Haque Purog",
+        "department": "CSE (SWE)",
+        "roomNumber": "UB 309",
+        "phoneNumber": 1724190980,
+        "photoURL": "photos/01724190980"
+    },
+    {
+        "id": 4,
+        "name": "Tahmid Ishrak",
+        "department": "CEE",
+        "roomNumber": "North 421",
+        "phoneNumber": 1781090991,
+        "photoURL": "photos/01781090991"
+    },
+    {
+        "id": 6,
+        "name": "Md. Mushfiqul Islam",
+        "department": "EEE",
+        "roomNumber": "South 121",
+        "phoneNumber": 1681090881,
+        "photoURL": "photos/01681090881"
+    },
+    {
+        "id": 5,
+        "name": "Muhtasim Mashfy",
+        "department": "MCE",
+        "roomNumber": "North 121",
+        "phoneNumber": 1781090881,
+        "photoURL": "photos/01781090881"
+    }
+]
