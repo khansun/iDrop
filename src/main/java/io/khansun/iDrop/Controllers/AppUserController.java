@@ -35,6 +35,7 @@ public class AppUserController {
         appUserService.addAppUserRole(username,userRole.getName());
         return ResponseEntity.ok().build() ;
     }
+
 }
 @Data
 class RoleToAppUserForm {
