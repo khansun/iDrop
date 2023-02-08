@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -54,7 +55,13 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
                 .withSubject(user.getUsername())
                 .withExpiresAt(new java.util.Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .sign(algorithm);
-        response.setHeader("access_token", accessToken);
-        response.setHeader("refresh_token", refreshToken);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String jsonRes = "{ \"status\": 200,  \"username\": \""+ user.getUsername()
+                +  "\" , \"access_token\": \""+accessToken + "\" ,"
+                +  "\"refresh_token\": \""+refreshToken + "\" }";
+        response.getWriter().write(jsonRes);
     }
+
 }
