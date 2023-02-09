@@ -1,10 +1,14 @@
 package io.khansun.iDrop.Filter;
-
+import org.json.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureGenerationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import io.khansun.iDrop.Models.AppUser;
@@ -15,13 +19,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,12 +39,62 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     public AuthFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
     }
+
+    public static String getBody(HttpServletRequest request)  {
+
+        String body = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            // throw ex;
+            return "";
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+
+                }
+            }
+        }
+
+        body = stringBuilder.toString();
+        return body;
+    }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+
+        String jObj = getBody(request);
+        try {
+            JSONObject jsonObject = new JSONObject(jObj);
+            String username = (String)jsonObject.get("username");
+            String password = (String)jsonObject.get("password");
+            log.info("Username: {}", username);
+            log.info("Password: {}", password) ;
+
+        }catch (JSONException err){
+            log.info("Error", err.toString());
+
+        }
+//        log.info("BODY: ");
+//        System.out.println(jObj);
+        String username = "will"; //request.getParameter("username");
+        String password = "1234"; //request.getParameter("password");
         log.info("Username: {}", username);
-        log.info("Password: {}", password);
+        log.info("Password: {}", password) ;
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }
