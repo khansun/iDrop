@@ -35,6 +35,25 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+    String userName;
+    String password;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     private final AuthenticationManager authenticationManager;
     public AuthFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
@@ -76,23 +95,22 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        AuthFilter authFilter = new AuthFilter(authenticationManager);
 
         String jObj = getBody(request);
         try {
             JSONObject jsonObject = new JSONObject(jObj);
             String username = (String)jsonObject.get("username");
+            authFilter.setUserName(username);
             String password = (String)jsonObject.get("password");
-            log.info("Username: {}", username);
-            log.info("Password: {}", password) ;
+            authFilter.setPassword(password);
 
         }catch (JSONException err){
             log.info("Error", err.toString());
 
         }
-//        log.info("BODY: ");
-//        System.out.println(jObj);
-        String username = "will"; //request.getParameter("username");
-        String password = "1234"; //request.getParameter("password");
+        String username = authFilter.getUserName();
+        String password = authFilter.getPassword();
         log.info("Username: {}", username);
         log.info("Password: {}", password) ;
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
