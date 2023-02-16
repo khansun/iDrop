@@ -23,23 +23,23 @@ public class IDropApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(IDropApplication.class, args);
 	}
-//	@Bean
-//	CommandLineRunner run(AppUserService appUserService){
-//		return args -> 	{
-//			appUserService.saveUserRole(new UserRole(null,"ROLE_USER"));
-//			appUserService.saveUserRole(new UserRole(null,"ROLE_ADMIN"));
-//			appUserService.saveUserRole(new UserRole(null,"ROLE_SUPER_ADMIN"));
-//			appUserService.saveAppUser(new AppUser(null,"John Travolta","john","1234", new ArrayList<>()));
-//			appUserService.saveAppUser(new AppUser(null,"Will Smith","will","1234", new ArrayList<>()));
-//			appUserService.saveAppUser(new AppUser(null,"Jim Carry","jim","1234", new ArrayList<>()));
-//			appUserService.saveAppUser(new AppUser(null,"Arnold Schwarzenegger","arnold","1234", new ArrayList<>()));
-//			appUserService.addAppUserRole("john","ROLE_USER");
-//			appUserService.addAppUserRole("will","ROLE_USER");
-//			appUserService.addAppUserRole("jim","ROLE_ADMIN");
-//			appUserService.addAppUserRole("arnold","ROLE_SUPER_ADMIN");
-//
-//		};
-//	}
+	@Bean
+	CommandLineRunner run(AppUserService appUserService){
+		return args -> 	{
+			appUserService.saveUserRole(new UserRole(null,"ROLE_USER"));
+			appUserService.saveUserRole(new UserRole(null,"ROLE_ADMIN"));
+			appUserService.saveUserRole(new UserRole(null,"ROLE_SUPER_ADMIN"));
+			appUserService.saveAppUser(new AppUser(null,"John Travolta","john","1234", new ArrayList<>()));
+			appUserService.saveAppUser(new AppUser(null,"Will Smith","will","1234", new ArrayList<>()));
+			appUserService.saveAppUser(new AppUser(null,"Jim Carry","jim","1234", new ArrayList<>()));
+			appUserService.saveAppUser(new AppUser(null,"Arnold Schwarzenegger","arnold","1234", new ArrayList<>()));
+			appUserService.addAppUserRole("john","ROLE_USER");
+			appUserService.addAppUserRole("will","ROLE_USER");
+			appUserService.addAppUserRole("jim","ROLE_ADMIN");
+			appUserService.addAppUserRole("arnold","ROLE_SUPER_ADMIN");
+
+		};
+	}
 	@Bean
 	BCryptPasswordEncoder PasswordEncoder(){
 		return new BCryptPasswordEncoder();

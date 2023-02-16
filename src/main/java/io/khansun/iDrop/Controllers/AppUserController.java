@@ -5,6 +5,8 @@ import io.khansun.iDrop.Models.UserRole;
 import io.khansun.iDrop.Services.AppUserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,18 +20,32 @@ public class AppUserController {
         return ResponseEntity.ok().body(appUserService.getAppUsers());
     }
     @PostMapping("user/save")
-    public ResponseEntity<AppUser> saveAppUser(AppUser appUser){
+    public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser){
         return ResponseEntity.ok().body(appUserService.saveAppUser(appUser));
     }
     @PostMapping("role/save")
-    public ResponseEntity<UserRole> saveAppUser(UserRole userRole){
+    public ResponseEntity<UserRole> saveAppUser(@RequestBody UserRole userRole){
         return ResponseEntity.ok().body(appUserService.saveUserRole(userRole));
     }
 
     @PostMapping("role/addtouser")
-    public ResponseEntity<?> addUserRole(AppUser appUser, UserRole userRole){
-        String username = appUser.getUsername();
-        appUserService.addAppUserRole(username,userRole.getName());
+    public ResponseEntity<?> addUserRole(@RequestBody String formData){
+        System.out.println(formData);
+        RoleToAppUserForm roleToAppUserForm = new RoleToAppUserForm();
+        try {
+            JSONObject jsonObject = new JSONObject(formData);
+            String username = (String)jsonObject.get("username");
+            roleToAppUserForm.setUsername(username);
+            String role = (String)jsonObject.get("role");
+            roleToAppUserForm.setRole(role);
+
+        }catch (JSONException err){
+//            log.info("Error", err.toString());
+
+        }
+        System.out.println(roleToAppUserForm.getUsername());
+        System.out.println(roleToAppUserForm.getRole());
+        appUserService.addAppUserRole(roleToAppUserForm.getUsername(), roleToAppUserForm.getRole());
         return ResponseEntity.ok().build() ;
     }
 
@@ -38,4 +54,14 @@ public class AppUserController {
 class RoleToAppUserForm {
     private String username;
     private String role;
+
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }
