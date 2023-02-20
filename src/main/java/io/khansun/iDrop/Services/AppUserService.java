@@ -46,7 +46,10 @@ public class AppUserService implements iAppUserService, UserDetailsService {
     public AppUser getAppUser(String username) {
         return appUserRepo.findByUsername(username);
     }
-
+    @Override
+    public List<UserRole> getUserRoles() {
+        return userRoleRepo.findAll();
+    }
     @Override
     public List<AppUser> getAppUsers() {
         return appUserRepo.findAll();

@@ -11,4 +11,5 @@ public interface iAppUserService {
     void addAppUserRole(String username, String role);
     AppUser getAppUser(String username);
     List<AppUser> getAppUsers();
+    List<UserRole> getUserRoles();
 }
