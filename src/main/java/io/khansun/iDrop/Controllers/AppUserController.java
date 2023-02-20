@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,10 @@ public class AppUserController {
     }
     @PostMapping("user/save")
     public ResponseEntity<AppUser> saveAppUser(@RequestBody AppUser appUser){
+        if (appUser.getUsername() == null || appUser.getUsername().isEmpty() || appUser.getPassword() == null || appUser.getPassword().isEmpty())
+            return ResponseEntity.badRequest().body(appUser);
+        else if(appUserService.getAppUser(appUser.getUsername()) != null)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(appUser);
         return ResponseEntity.ok().body(appUserService.saveAppUser(appUser));
     }
     @PostMapping("role/save")

@@ -4,37 +4,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.SignatureGenerationException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import io.khansun.iDrop.Models.AppUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     String userName;
     String password;
 
@@ -55,7 +43,7 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     private final AuthenticationManager authenticationManager;
-    public AuthFilter(AuthenticationManager authenticationManager){
+    public AuthenticationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
     }
 
@@ -95,22 +83,22 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        AuthFilter authFilter = new AuthFilter(authenticationManager);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager);
 
         String jObj = getBody(request);
         try {
             JSONObject jsonObject = new JSONObject(jObj);
             String username = (String)jsonObject.get("username");
-            authFilter.setUserName(username);
+            authenticationFilter.setUserName(username);
             String password = (String)jsonObject.get("password");
-            authFilter.setPassword(password);
+            authenticationFilter.setPassword(password);
 
         }catch (JSONException err){
             log.info("Error", err.toString());
 
         }
-        String username = authFilter.getUserName();
-        String password = authFilter.getPassword();
+        String username = authenticationFilter.getUserName();
+        String password = authenticationFilter.getPassword();
         log.info("Username: {}", username);
         log.info("Password: {}", password) ;
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);

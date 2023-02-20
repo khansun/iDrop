@@ -1,6 +1,6 @@
 package io.khansun.iDrop.Security;
 
-import io.khansun.iDrop.Filter.AuthFilter;
+import io.khansun.iDrop.Filter.AuthenticationFilter;
 import io.khansun.iDrop.Services.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthFilter authFilter = new AuthFilter(authenticationManagerBean());
-        authFilter.setFilterProcessesUrl("/auth/login");
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
+        authenticationFilter.setFilterProcessesUrl("/auth/login");
         http.csrf().disable().cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.GET,"student/*").permitAll();
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //        http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth/users/**").hasAuthority("ROLE_ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
 //        http.csrf().disable().cors().and().authorizeRequests().anyRequest().permitAll();
-        http.addFilter(authFilter);
+        http.addFilter(authenticationFilter);
 
     }
 
