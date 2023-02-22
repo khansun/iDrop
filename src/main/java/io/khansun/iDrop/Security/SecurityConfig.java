@@ -1,6 +1,7 @@
 package io.khansun.iDrop.Security;
 
 import io.khansun.iDrop.Filter.AuthenticationFilter;
+import io.khansun.iDrop.Filter.AuthorizationFilter;
 import io.khansun.iDrop.Services.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -32,13 +34,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().disable().cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.GET,"student/*").permitAll();
-//        http.authorizeRequests().antMatchers(HttpMethod.POST,"**/login/**").permitAll();
-//        http.authorizeRequests().antMatchers(HttpMethod.POST,"/auth/login/**").permitAll();
-//        http.authorizeRequests().antMatchers(HttpMethod.GET, "/auth/users/**").hasAuthority("ROLE_USER");
-//        http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth/users/**").hasAuthority("ROLE_ADMIN");
-//        http.authorizeRequests().anyRequest().authenticated();
-//        http.csrf().disable().cors().and().authorizeRequests().anyRequest().permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/auth/roles").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/auth/users/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/student/add/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/student/delete/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
+        http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(authenticationFilter);
+        http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
+
+
+
+
 
     }
 
