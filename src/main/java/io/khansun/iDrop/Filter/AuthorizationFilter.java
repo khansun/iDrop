@@ -22,7 +22,7 @@ import static java.util.Arrays.stream;
 public class AuthorizationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/auth/login") || request.getServletPath().equals("/auth/register") || request.getServletPath().equals("/auth/roles")) {
+        if (request.getServletPath().equals("/auth/login") || request.getServletPath().equals("/auth/register") || request.getServletPath().equals("/auth/roles") || request.getServletPath().equals("/token/refresh")) {
             filterChain.doFilter(request, response);
         }
         else {
