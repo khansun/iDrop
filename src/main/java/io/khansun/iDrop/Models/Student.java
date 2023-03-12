@@ -1,8 +1,15 @@
 package io.khansun.iDrop.Models;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
-@Entity
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+
+@Entity @NoArgsConstructor
 public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -12,7 +19,11 @@ public class Student implements Serializable {
     private String department;
     private String roomNumber;
     private int phoneNumber;
+
+    private Date dateOfBirth;
     private String photoURL;
+
+
     public Long getId() {
         return id;
     }
@@ -61,15 +72,7 @@ public class Student implements Serializable {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
-    public Student(){}
-    public Student(Long id, String name, String department, String roomNumber, int phoneNumber, String photoURL) {
-        this.id = id;
-        this.name = name;
-        this.department = department;
-        this.roomNumber = roomNumber;
-        this.phoneNumber = phoneNumber;
-        this.photoURL = photoURL;
-    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -82,4 +85,15 @@ public class Student implements Serializable {
                 '}';
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date birthDate) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+//        LocalDate date = LocalDate.parse(birthDate, formatter);
+//        System.out.println(date);
+
+        this.dateOfBirth = birthDate;
+    }
 }

@@ -79,12 +79,12 @@ public class AppUserController {
         return ResponseEntity.ok().build() ;
     }
 
-    @GetMapping("/token/refresh")
+    @GetMapping("/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader("Authorization");
         log.info("Authorization Header: " + authorizationHeader);
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -105,22 +105,24 @@ public class AppUserController {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
 
-                String jsonRes = "{ \"status\": 200,  \"username\": \""+ appUser.getUsername()
-                        +  "\" , \"access_token\": \""+accessToken + "\" ,"
+                String jsonRes = "{ \"status\": 200,"+ "\"access_token\": \""+accessToken + "\" ,"
                         +  "\"refresh_token\": \""+token + "\" }";
                 response.getWriter().write(jsonRes);
 
             }
             catch (Exception e) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
 
-                response.setHeader("error", e.getMessage());
+                String jsonRes = "{ \"status\": \"403\"," +  "\"error\": \""+ e.getMessage()+ "\" }";
+                response.getWriter().write(jsonRes);
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
         }
-        else {
-            throw new RuntimeException("Refresh token is missing");
-        }
-    }
+//        else {
+//            throw new RuntimeException("Refresh token is missing");
+//        }
+//    }
 }
 @Data
 class RoleToAppUserForm {
